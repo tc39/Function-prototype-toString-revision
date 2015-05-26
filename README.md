@@ -8,6 +8,8 @@ The goals of this proposal are
     > criteria then it must return a string for which `eval` will throw a
     > **SyntaxError** exception.
 
+0. clarify the "functionally equivalent" requirement
+
 0. standardise the string representation of built-in functions and host objects
 
 0. clarify requirement of representation based on the "actual characteristics" of an object
