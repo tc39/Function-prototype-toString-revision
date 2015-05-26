@@ -4,9 +4,9 @@ The goals of this proposal are
 
 0. remove the forward-incompatible requirement
 
-> If the implementation cannot produce a source code string that meets these
-> criteria then it must return a string for which `eval` will throw a
-> **SyntaxError** exception.
+    > If the implementation cannot produce a source code string that meets these
+    > criteria then it must return a string for which `eval` will throw a
+    > **SyntaxError** exception.
 
 0. standardise the string representation of built-in functions and host objects
 
