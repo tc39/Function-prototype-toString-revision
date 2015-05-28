@@ -1,4 +1,4 @@
-This is a proposal to replace ES2015 section 19.2.3.5.
+This is a stage 1 ES2016 proposal to replace ES2015's section 19.2.3.5.
 
 The goals of this proposal are
 
