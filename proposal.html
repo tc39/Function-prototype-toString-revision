@@ -7,15 +7,74 @@
 title: Function.prototype.toString revision and Function.prototype.isPortable addition
 status: proposal
 stage: 1
-copyright: false
 contributors: Michael Ficarra
 toc: true
 </pre>
 
+<emu-intro>
+  <h1>Introduction</h1>
+  <h2>Goals</h2>
+
+  <p>The original goals of this proposal were</p>
+
+  <ul>
+    <li>
+      remove the forward-incompatible requirement
+      <blockquote>
+        If the implementation cannot produce a source code string that meets these criteria then it must return a string for which `eval` will throw a *SyntaxError* exception.
+      </blockquote>
+    <li>clarify the "functionally equivalent" requirement
+    <li>standardise the string representation of built-in functions and host objects
+    <li>clarify requirement of representation based on the "actual characteristics" of an object
+  </ul>
+
+  <p>The revised goals of this proposal also include</p>
+
+  <ul>
+    <li>define concept of "portability" in `Function.prototype.isPortable`
+    <li>make a guarantee about the behaviour of portable functions after deserialisation in a lexical context equivalent to the definition site
+  </ul>
+
+  <h2>Definition of portability</h2>
+
+  <p>
+    A function _F_ defined in a lexical environment _L_ is <dfn>portable</dfn> if any function generated from a direct eval of `F.toString()` in _L_ has a [[Call]] internal method that is indistinguishable from F.[[Call]].
+    Two [[Call]] internal methods are <dfn>indistinguishable</dfn> if, for all _thisArgument_ values, _argumentList_ values, and current execution context stacks _context_, each method returns the same value according to |SameValue| and has the same effects on _context_ when invoked with _thisArgument_ and _argumentList_ in the execution context _context_.
+  </p>
+
+  <h3>So what is <em>not</em> portable?</h3>
+
+  <emu-table>
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Portable?</th>
+          <th>Why?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Functions with lexical closure</td><td>Yes</td><td>Part of lexical environment</td></tr>
+        <tr><td>Functions mentioning *this*</td><td>Yes</td><td>Part of Execution Context</td></tr>
+        <tr><td>Functions with free variables</td><td>Yes</td><td>Part of Execution Context</td></tr>
+        <tr><td>Functions mentioning new.target</td><td>Yes</td><td>Part of Execution Context</td></tr>
+        <tr><td>Arrows mentioning `arguments`</td><td>Yes</td><td>Part of Execution Context</td></tr>
+        <tr><td>Arrows mentioning `this`</td><td>Yes</td><td>Part of Execution Context</td></tr>
+        <tr><td>Functions in WithStatement</td><td>Yes</td><td>Part of Execution Context</td></tr>
+        <tr><td>Super calls</td><td>No</td><td>[[HomeObject]] is static but not part of lexical environment</td></tr>
+        <tr><td>Super properties</td><td>No</td><td>[[HomeObject]] is static but not part of lexical environment</td></tr>
+      </tbody>
+    </table>
+  </emu-table>
+
+  <p>
+    Functions that are not portable make use of a value that is determined statically but is not part of the lexical environment, a static mapping between names and values (not to be confused with the runtime component of an Execution Context, Lexical Environment).
+  </p>
+</emu-intro>
 
 <!-- es6num="19.2.3.5" -->
 <emu-clause id="sec-function.prototype.tostring">
-<h1>(<a href="http://tc39.github.io/ecma262/#sec-function.prototype.tostring">19.2.3.5</a>) Function.prototype.toString()</h1>
+  <h1>(<a href="http://tc39.github.io/ecma262/#sec-function.prototype.tostring">19.2.3.5</a>) Function.prototype.toString()</h1>
 
   <p>When the `toString` method is called with an object _func_ as its *this* value, the following steps are taken:</p>
 
@@ -39,7 +98,7 @@ toc: true
   <ins class="block">
     <emu-alg>
       1. If _func_ is a Bound Function exotic object, then return an implementation-dependent string source code representation of _func_. It is implementation dependent whether the representation includes bound function information or information about the target function. The representation must conform to the rules below.
-      1. If Type(_func_) is Object and is either a built-in function object or has an [[ECMAScriptCode]] internal slot, then return an implementation-dependent string source code representation of _func_. The representation must conform to the rules below.
+      1. If Type(_func_) is Object and _func_ is either a built-in function object or has an [[ECMAScriptCode]] internal slot, then return an implementation-dependent string source code representation of _func_. The representation must conform to the rules below.
       1. Throw a *TypeError* exception.
     </emu-alg>
 
@@ -49,8 +108,7 @@ toc: true
       <li>
         If _func_ has an [[ECMAScriptCode]] internal slot,
         <ul>
-          <li>
-            If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated using a direct call to `eval` in a lexical context that is equivalent to the lexical context used to create _func_, an object will be created such that the object's [[Call]] internal method is indistinguishable from the [[Call]] internal method of _func_. Two [[Call]] internal methods are indistinguishable if, for all `thisArgument` values, `argumentList` values, and current execution context stacks `context`, each method returns the same value according to SameValue and has the same effects on `context` when invoked with `thisArgument` and `argumentList` in the execution context `context`.
+          <li>If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated using a direct call to `eval` in a lexical context that is equivalent to the lexical context used to create _func_, an object will be created such that the object's [[Call]] internal method is indistinguishable from the [[Call]] internal method of _func_. Two [[Call]] internal methods are indistinguishable if, for all `thisArgument` values, `argumentList` values, and current execution context stacks `context`, each method returns the same value according to SameValue and has the same effects on `context` when invoked with `thisArgument` and `argumentList` in the execution context `context`.
             <emu-note>same for [[Construct]] if the function has a [[Construct]]?</emu-note>
             <emu-note>do the internal slots have to be the same?</emu-note>
             <emu-note>I would like to add an assertion about preserving arity.</emu-note>
@@ -60,8 +118,9 @@ toc: true
           <li>Else if _func_ was defined using |ArrowFunction|, then the string representation must have the syntax of an |ArrowFunction|.
           <li>Else if _func_ was defined using |GeneratorMethod|, then the string representation must have the syntax of a |GeneratorExpression|.
           <li>Else if _func_ was defined using |MethodDefinition|, then the string representation must have the syntax of a |FunctionExpression|.
-          <li>Else, the string representation must have the syntax of a |FunctionExpression|. <emu-note>Functions created using the Function constructor are not defined using ECMAScript code, but do have an [[ECMAScriptCode]] internal slot.</emu-note>
-          <li><emu-note>If we want to be more explicit here, I can have FunctionInitialize/FunctionCreate set an internal slot with this info</emu-note>
+          <li>Else, the string representation must have the syntax of a |FunctionExpression|.
+          <emu-note>Functions created using the Function constructor are not defined using ECMAScript code, but do have an [[ECMAScriptCode]] internal slot.</emu-note>
+          <emu-note>If we want to be more explicit here, I can have FunctionInitialize/FunctionCreate set an internal slot with this info</emu-note>
         </ul>
 
       <li>Else, the string representation must have the syntax of a |NativeFunction|.
@@ -71,6 +130,7 @@ toc: true
       NativeFunction :
         `function` BindingIdentifier? `(` FormalParameters `)` `{` `[` `native` `code` `]` `}`
     </emu-grammar>
+
   </ins>
 </emu-clause>
 
@@ -92,8 +152,6 @@ toc: true
   <ins class="block">
     <h1>IsPortable(_func_)</h1>
 
-    <p>The abstract operation IsPortable determines if this function may be serialiased and deserialised in an equivalent lexical context while preserving [[Call]] behaviour by performing the following steps:</p>
-
     <emu-alg>
       1. Assert: Type(_func_) is Object.
       1. Assert: _func_ has an [[ECMAScriptCode]] internal slot.
@@ -102,6 +160,10 @@ toc: true
       1. If _body_ Contains |SuperProperty|, return *false*.
       1. Return true.
     </emu-alg>
+
+    <emu-note>
+      The abstract operation IsPortable determines if this function may be serialiased and deserialised in an equivalent lexical context while preserving [[Call]] behaviour.
+    </emu-note>
   </ins>
 </emu-clause>
 
