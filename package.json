@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "name": "function-prototype-tostring-revision",
+  "version": "0.0.0",
+  "description": "ECMA-262 proposal to update Function.prototype.toString and add Function.prototype.isPortable",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/michaelficarra/Function-prototype-toString-revision.git"
+  },
+  "keywords": [
+    "ECMA-262",
+    "ECMAScript",
+    "Function",
+    "prototype",
+    "toString",
+    "isPortable",
+    "proposal"
+  ],
+  "author": "Michael Ficarra",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/michaelficarra/Function-prototype-toString-revision/issues"
+  },
+  "homepage": "https://github.com/michaelficarra/Function-prototype-toString-revision#readme",
+  "devDependencies": {
+    "ecmarkup": "^2.8.6"
+  }
+}

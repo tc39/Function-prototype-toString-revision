@@ -1,0 +1,113 @@
+<!doctype html>
+<meta charset="utf8">
+<link rel="stylesheet" href="ecmarkup.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script src="ecmarkup.js"></script>
+<pre class=metadata>
+title: Function.prototype.toString revision and Function.prototype.isPortable addition
+status: proposal
+stage: 1
+copyright: false
+contributors: Michael Ficarra
+toc: true
+</pre>
+
+
+<!-- es6num="19.2.3.5" -->
+<emu-clause id="sec-function.prototype.tostring">
+<h1>(<a href="http://tc39.github.io/ecma262/#sec-function.prototype.tostring">19.2.3.5</a>) Function.prototype.toString()</h1>
+
+  <p>When the `toString` method is called with an object _func_ as its *this* value, the following steps are taken:</p>
+
+  <del class="block">
+    <emu-alg>
+      1. If _func_ is a Bound Function exotic object, then
+        1. Return an implementation-dependent String source code representation of _func_. The representation must conform to the rules below. It is implementation dependent whether the representation includes bound function information or information about the target function.
+      1. If Type(_func_) is Object and is either a built-in function object or has an [[ECMAScriptCode]] internal slot, then
+        1. Return an implementation-dependent String source code representation of _func_. The representation must conform to the rules below.
+      1. Throw a *TypeError* exception.
+    </emu-alg>
+    <p>`toString` Representation Requirements:</p>
+    <ul>
+      <li>The string representation must have the syntax of a |FunctionDeclaration|, |FunctionExpression|, |GeneratorDeclaration|, |GeneratorExpression|, |ClassDeclaration|, |ClassExpression|, |ArrowFunction|, |MethodDefinition|, or |GeneratorMethod| depending upon the actual characteristics of the object.
+      <li>The use and placement of white space, line terminators, and semicolons within the representation String is implementation-dependent.
+      <li>If the object was defined using ECMAScript code and the returned string representation is not in the form of a |MethodDefinition| or |GeneratorMethod| then the representation must be such that if the string is evaluated, using `eval` in a lexical context that is equivalent to the lexical context used to create the original object, it will result in a new functionally equivalent object. In that case the returned source code must not mention freely any variables that were not mentioned freely by the original function's source code, even if these &ldquo;extra&rdquo; names were originally in scope.
+      <li>If the implementation cannot produce a source code string that meets these criteria then it must return a string for which `eval` will throw a *SyntaxError* exception.
+    </ul>
+  </del>
+
+  <ins class="block">
+    <emu-alg>
+      1. If _func_ is a Bound Function exotic object, then return an implementation-dependent string source code representation of _func_. It is implementation dependent whether the representation includes bound function information or information about the target function. The representation must conform to the rules below.
+      1. If Type(_func_) is Object and is either a built-in function object or has an [[ECMAScriptCode]] internal slot, then return an implementation-dependent string source code representation of _func_. The representation must conform to the rules below.
+      1. Throw a *TypeError* exception.
+    </emu-alg>
+
+    <p>`toString` Representation Requirements:</p>
+
+    <ul>
+      <li>
+        If _func_ has an [[ECMAScriptCode]] internal slot,
+        <ul>
+          <li>
+            If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated using a direct call to `eval` in a lexical context that is equivalent to the lexical context used to create _func_, an object will be created such that the object's [[Call]] internal method is indistinguishable from the [[Call]] internal method of _func_. Two [[Call]] internal methods are indistinguishable if, for all `thisArgument` values, `argumentList` values, and current execution context stacks `context`, each method returns the same value according to SameValue and has the same effects on `context` when invoked with `thisArgument` and `argumentList` in the execution context `context`.
+            <emu-note>same for [[Construct]] if the function has a [[Construct]]?</emu-note>
+            <emu-note>do the internal slots have to be the same?</emu-note>
+            <emu-note>I would like to add an assertion about preserving arity.</emu-note>
+          <li>If _func_ was defined using |FunctionExpression| or |FunctionDeclaration|, then the string representation must have the syntax of a |FunctionExpression|.
+          <li>Else if _func_ was defined using |ClassExpression| or |ClassDeclaration|, then the string representation must have the syntax of a |ClassExpression|.
+          <li>Else if _func_ was defined using |GeneratorExpression| or |GeneratorDeclaration|, then the string representation must have the syntax of a |GeneratorExpression|.
+          <li>Else if _func_ was defined using |ArrowFunction|, then the string representation must have the syntax of an |ArrowFunction|.
+          <li>Else if _func_ was defined using |GeneratorMethod|, then the string representation must have the syntax of a |GeneratorExpression|.
+          <li>Else if _func_ was defined using |MethodDefinition|, then the string representation must have the syntax of a |FunctionExpression|.
+          <li>Else, the string representation must have the syntax of a |FunctionExpression|. <emu-note>Functions created using the Function constructor are not defined using ECMAScript code, but do have an [[ECMAScriptCode]] internal slot.</emu-note>
+          <li><emu-note>If we want to be more explicit here, I can have FunctionInitialize/FunctionCreate set an internal slot with this info</emu-note>
+        </ul>
+
+      <li>Else, the string representation must have the syntax of a |NativeFunction|.
+    </ul>
+
+    <emu-grammar>
+      NativeFunction :
+        `function` BindingIdentifier? `(` FormalParameters `)` `{` `[` `native` `code` `]` `}`
+    </emu-grammar>
+  </ins>
+</emu-clause>
+
+<emu-clause id="sec-function.prototype.isportable">
+  <ins class="block">
+    <h1>Function.prototype.isPortable()</h1>
+
+    <p>When the `isPortable` method is called with an object _func_ as its *this* value, the following steps are taken:</p>
+
+    <emu-alg>
+      1. If Type(_func_) is not Object, throw a *TypeError* exception.
+      1. If _func_ does not have an [[ECMAScriptCode]] internal slot, throw a *TypeError* exception.
+      1. Return IsPortable(_func_).
+    </emu-alg>
+  </ins>
+</emu-clause>
+
+<emu-clause id="sec-isportable" aoid="IsPortable">
+  <ins class="block">
+    <h1>IsPortable(_func_)</h1>
+
+    <p>The abstract operation IsPortable determines if this function may be serialiased and deserialised in an equivalent lexical context while preserving [[Call]] behaviour by performing the following steps:</p>
+
+    <emu-alg>
+      1. Assert: Type(_func_) is Object.
+      1. Assert: _func_ has an [[ECMAScriptCode]] internal slot.
+      1. Let _body_ be _func_.[[ECMAScriptCode]].
+      1. If _body_ Contains |SuperCall|, return *false*.
+      1. If _body_ Contains |SuperProperty|, return *false*.
+      1. Return true.
+    </emu-alg>
+  </ins>
+</emu-clause>
+
+<emu-clause id="sec-reflect.isportable">
+  <ins class="block">
+    <h1>Relect.isPortable(_func_)</h1>
+    <emu-note>is this necessary?</emu-note>
+  </ins>
+</emu-clause>
