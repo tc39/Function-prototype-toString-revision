@@ -39,7 +39,6 @@ toc: true
 
   <p>
     A function _F_ defined in a lexical environment _L_ is <dfn>portable</dfn> if any function generated from a direct eval of `F.toString()` in _L_ has a [[Call]] internal method that is indistinguishable from F.[[Call]].
-    Two [[Call]] internal methods are <dfn>indistinguishable</dfn> if, for all _thisArgument_ values, _argumentList_ values, and current execution context stacks _context_, each method returns the same value according to |SameValue| and has the same effects on _context_ when invoked with _thisArgument_ and _argumentList_ in the execution context _context_.
   </p>
 
   <h3>So what is <em>not</em> portable?</h3>
@@ -108,7 +107,7 @@ toc: true
       <li>
         If _func_ has an [[ECMAScriptCode]] internal slot,
         <ul>
-          <li>If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated using a direct call to `eval` in a lexical context that is equivalent to the lexical context used to create _func_, an object will be created such that the object's [[Call]] internal method is indistinguishable from the [[Call]] internal method of _func_. Two [[Call]] internal methods are indistinguishable if, for all `thisArgument` values, `argumentList` values, and current execution context stacks `context`, each method returns the same value according to SameValue and has the same effects on `context` when invoked with `thisArgument` and `argumentList` in the execution context `context`.
+          <li>If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated using a direct call to `eval` in a lexical context that is equivalent to the lexical context used to create _func_, an object will be created such that the object's [[Call]] internal method is indistinguishable from the [[Call]] internal method of _func_.
             <emu-note>same for [[Construct]] if the function has a [[Construct]]?</emu-note>
             <emu-note>do the internal slots have to be the same?</emu-note>
             <emu-note>I would like to add an assertion about preserving arity.</emu-note>
