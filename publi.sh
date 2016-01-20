@@ -2,7 +2,10 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 TEMP_BRANCH=$(date | md5sum | cut -d ' ' -f 1)
 if [ "$TRAVIS" == true ]; then
   CURRENT_BRANCH="$TRAVIS_BRANCH"
-  [ "$TRAVIS_SECURE_ENV_VARS" == true -a -n "$GITHUB_DEPLOY_KEY" -a "$TRAVIS_PULL_REQUEST" == false -a "$TRAVIS_BRANCH" == master ] || exit 1
+  echo "TRAVIS_SECURE_ENV_VARS=$TRAVIS_SECURE_ENV_VARS"
+  echo "TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
+  echo "TRAVIS_BRANCH=$TRAVIS_BRANCH"
+  [ "$TRAVIS_SECURE_ENV_VARS" == true -a "$TRAVIS_PULL_REQUEST" == false -a "$TRAVIS_BRANCH" == master ] || exit 1
   openssl aes-256-cbc -K $encrypted_1cf5552cca3f_key -iv $encrypted_1cf5552cca3f_iv -in github-deploy-key.enc -out github-deploy-key -d
   chmod 600 github-deploy-key
   eval "$(ssh-agent -s)"
