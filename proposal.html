@@ -38,7 +38,7 @@ toc: true
   <h2>Definition of portability</h2>
 
   <p>
-    A function _F_ defined in a lexical environment _L_ is <dfn>portable</dfn> if any function generated from a direct eval of `F.toString()` in _L_ has a [[Call]] internal method that is indistinguishable from F.[[Call]].
+    A function _F_ defined in a lexical environment _L_ is <dfn>portable</dfn> if any function generated from the evaluation of `F.toString()` in _L_ has a [[Call]] internal method that is indistinguishable from F.[[Call]].
   </p>
 
   <h3>So what is <em>not</em> portable?</h3>
@@ -54,22 +54,26 @@ toc: true
       </thead>
       <tbody>
         <tr><td>Functions with lexical closure</td><td>Yes</td><td>Part of lexical environment</td></tr>
+        <tr><td>Functions defined in strict mode code</td><td>Yes</td><td>Part of lexical environment</td></tr>
         <tr><td>Functions mentioning *this*</td><td>Yes</td><td>Part of Execution Context</td></tr>
         <tr><td>Functions with free variables</td><td>Yes</td><td>Part of Execution Context</td></tr>
         <tr><td>Functions mentioning new.target</td><td>Yes</td><td>Part of Execution Context</td></tr>
         <tr><td>Arrows mentioning `arguments`</td><td>Yes</td><td>Part of Execution Context</td></tr>
         <tr><td>Arrows mentioning `this`</td><td>Yes</td><td>Part of Execution Context</td></tr>
         <tr><td>Functions in WithStatement</td><td>Yes</td><td>Part of Execution Context</td></tr>
+        <tr><td>Classes</td><td>Yes</td><td>[[Call]] always throws TypeError; in future, call constructors should be preserved</td></tr>
         <tr><td>Super calls</td><td>No</td><td>[[HomeObject]] is static but not part of lexical environment</td></tr>
         <tr><td>Super properties</td><td>No</td><td>[[HomeObject]] is static but not part of lexical environment</td></tr>
         <tr><td>Methods</td><td>No</td><td>Methods aren't "evaluated", they are "defined"</td></tr>
-        <tr><td>Classes</td><td>Yes</td><td>[[Call]] always throws TypeError; in future, call constructors should be preserved</td></tr>
+        <tr><td>Bound functions</td><td>No</td><td>Infeasible</td></tr>
+        <tr><td>Native functions</td><td>No</td><td>Infeasible</td></tr>
+        <tr><td>Non-function callable objects</td><td>No</td><td>Infeasible</td></tr>
       </tbody>
     </table>
   </emu-table>
 
   <p>
-    Functions that are not portable make use of a value that is determined statically but is not part of the lexical environment, a static mapping between names and values (not to be confused with the runtime component of an Execution Context, Lexical Environment).
+    Functions that are not portable make use of a value that is determined statically but is not part of the lexical environment (not to be confused with the runtime component of an Execution Context, Lexical Environment), which is simply a list of bound names and the strict/sloppy mode status.
   </p>
 </emu-intro>
 
