@@ -111,9 +111,8 @@ toc: true
     <p>`toString` Representation Requirements:</p>
 
     <ul>
-      <li>If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated in a lexical context that is equivalent to the lexical context used to create _func_, an object will be created such that the object's [[Call]] internal method is indistinguishable from the [[Call]] internal method of _func_.
+      <li>If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated in a lexical context that is equivalent to the lexical context used to create _func_, an object _g_ will be created such that _g_.[[Call]] is indistinguishable from _func_.[[Call]]. Additionally, the values of the *"length"* and *"name"* fields of *g* must be SameValue to the values of the corresponding fields of *func*.
         <emu-note>Should we explicitly state that each of the internal slots will be the same?</emu-note>
-        <emu-note>TODO: assert "name" and "length" fields are preserved</emu-note>
       <li>If _func_ was defined using |FunctionExpression| or |FunctionDeclaration|, then the string representation must have the syntax of a |FunctionExpression|.
       <li>Else if _func_ was defined using |ClassExpression| or |ClassDeclaration|, then the string representation must have the syntax of a |ClassExpression|.
       <li>Else if _func_ was defined using |GeneratorExpression| or |GeneratorDeclaration|, then the string representation must have the syntax of a |GeneratorExpression|.
