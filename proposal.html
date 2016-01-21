@@ -62,6 +62,8 @@ toc: true
         <tr><td>Functions in WithStatement</td><td>Yes</td><td>Part of Execution Context</td></tr>
         <tr><td>Super calls</td><td>No</td><td>[[HomeObject]] is static but not part of lexical environment</td></tr>
         <tr><td>Super properties</td><td>No</td><td>[[HomeObject]] is static but not part of lexical environment</td></tr>
+        <tr><td>Methods</td><td>No</td><td>Methods aren't "evaluated", they are "defined"</td></tr>
+        <tr><td>Classes</td><td>Yes</td><td>[[Call]] always throws TypeError; in future, call constructors should be preserved</td></tr>
       </tbody>
     </table>
   </emu-table>
@@ -96,40 +98,41 @@ toc: true
 
   <ins class="block">
     <emu-alg>
-      1. If _func_ is a Bound Function exotic object, then return an implementation-dependent string source code representation of _func_. It is implementation dependent whether the representation includes bound function information or information about the target function. The representation must conform to the rules below.
-      1. If Type(_func_) is Object and _func_ is either a built-in function object or has an [[ECMAScriptCode]] internal slot, then return an implementation-dependent string source code representation of _func_. The representation must conform to the rules below.
+      1. If _func_ is a Bound Function exotic object, then return an implementation-dependent string source code representation of _func_. It is implementation dependent whether the representation includes bound function information or information about the target function. The representation must conform to the `toString` Representation Requirements below.
+      1. If Type(_func_) is Object and _func_ has an [[ECMAScriptCode]] internal slot, then return an implementation-dependent string source code representation of _func_. The representation must conform to the `toString` Representation Requirements below.
+      1. If Type(_func_) is Object and IsCallable(_func_) is *true*, return an implementation-dependent string source code representation of _func_ which has the syntax of a |NativeFunction|.
       1. Throw a *TypeError* exception.
     </emu-alg>
 
     <p>`toString` Representation Requirements:</p>
 
     <ul>
-      <li>
-        If _func_ has an [[ECMAScriptCode]] internal slot,
-        <ul>
-          <li>If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated using a direct call to `eval` in a lexical context that is equivalent to the lexical context used to create _func_, an object will be created such that the object's [[Call]] internal method is indistinguishable from the [[Call]] internal method of _func_.
-            <emu-note>same for [[Construct]] if the function has a [[Construct]]?</emu-note>
-            <emu-note>do the internal slots have to be the same?</emu-note>
-            <emu-note>I would like to add an assertion about preserving arity.</emu-note>
-          <li>If _func_ was defined using |FunctionExpression| or |FunctionDeclaration|, then the string representation must have the syntax of a |FunctionExpression|.
-          <li>Else if _func_ was defined using |ClassExpression| or |ClassDeclaration|, then the string representation must have the syntax of a |ClassExpression|.
-          <li>Else if _func_ was defined using |GeneratorExpression| or |GeneratorDeclaration|, then the string representation must have the syntax of a |GeneratorExpression|.
-          <li>Else if _func_ was defined using |ArrowFunction|, then the string representation must have the syntax of an |ArrowFunction|.
-          <li>Else if _func_ was defined using |GeneratorMethod|, then the string representation must have the syntax of a |GeneratorExpression|.
-          <li>Else if _func_ was defined using |MethodDefinition|, then the string representation must have the syntax of a |FunctionExpression|.
-          <li>Else, the string representation must have the syntax of a |FunctionExpression|.
-          <emu-note>Functions created using the Function constructor are not defined using ECMAScript code, but do have an [[ECMAScriptCode]] internal slot.</emu-note>
-          <emu-note>If we want to be more explicit here, I can have FunctionInitialize/FunctionCreate set an internal slot with this info</emu-note>
-        </ul>
-
-      <li>Else, the string representation must have the syntax of a |NativeFunction|.
+      <li>If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated in a lexical context that is equivalent to the lexical context used to create _func_, an object will be created such that the object's [[Call]] internal method is indistinguishable from the [[Call]] internal method of _func_.
+        <emu-note>Should we explicitly state that each of the internal slots will be the same?</emu-note>
+        <emu-note>TODO: assert "name" and "length" fields are preserved</emu-note>
+      <li>If _func_ was defined using |FunctionExpression| or |FunctionDeclaration|, then the string representation must have the syntax of a |FunctionExpression|.
+      <li>Else if _func_ was defined using |ClassExpression| or |ClassDeclaration|, then the string representation must have the syntax of a |ClassExpression|.
+      <li>Else if _func_ was defined using |GeneratorExpression| or |GeneratorDeclaration|, then the string representation must have the syntax of a |GeneratorExpression|.
+      <li>Else if _func_ was defined using |ArrowFunction|, then the string representation must have the syntax of an |ArrowFunction|.
+      <li>Else if _func_ was defined using |GeneratorMethod|, then the string representation must have the syntax of a |GeneratorMethod|.
+      <li>Else if _func_ was defined using |Getter|, then the string representation must have the syntax of a |Getter|.
+      <li>Else if _func_ was defined using |Setter|, then the string representation must have the syntax of a |Setter|.
+      <li>Else if _func_ was defined using |MethodDefinition|, then the string representation must have the syntax of a |MethodDefinition|.
+      <li>Else, the string representation must have the syntax of a |FunctionExpression|.
+      <emu-note>If we want to be more explicit here, I can have FunctionInitialize/FunctionCreate set an internal slot with this info</emu-note>
+      <emu-note>Functions created using the Function constructor are not defined using ECMAScript code, but do have an [[ECMAScriptCode]] internal slot.</emu-note>
     </ul>
 
     <emu-grammar>
       NativeFunction :
         `function` BindingIdentifier? `(` FormalParameters `)` `{` `[` `native` `code` `]` `}`
+      Getter :
+        `get` PropertyName `(` `)` `{` FunctionBody `}`
+      Setter :
+        `set` PropertyName `(` PropertySetParameterList `)` `{` FunctionBody `}`
     </emu-grammar>
 
+    <emu-note>|Getter| and |Setter| are convenient names for two of the alternatives of the |MethodDefinition| grammar. A final version of this proposal will reference these names within the |MethodDefinition| grammar and move these definitions to section 14.3.</emu-note>
   </ins>
 </emu-clause>
 
@@ -140,8 +143,7 @@ toc: true
     <p>When the `isPortable` method is called with an object _func_ as its *this* value, the following steps are taken:</p>
 
     <emu-alg>
-      1. If Type(_func_) is not Object, throw a *TypeError* exception.
-      1. If _func_ does not have an [[ECMAScriptCode]] internal slot, throw a *TypeError* exception.
+      1. If Type(_func_) is not Object or IsCallable(_func_) is *false*, throw a *TypeError* exception.
       1. Return IsPortable(_func_).
     </emu-alg>
   </ins>
@@ -153,11 +155,14 @@ toc: true
 
     <emu-alg>
       1. Assert: Type(_func_) is Object.
-      1. Assert: _func_ has an [[ECMAScriptCode]] internal slot.
-      1. Let _body_ be _func_.[[ECMAScriptCode]].
-      1. If _body_ Contains |SuperCall|, return *false*.
-      1. If _body_ Contains |SuperProperty|, return *false*.
-      1. Return true.
+      1. If _func_ does not have an [[ECMAScriptCode]] internal slot, return *false*.
+      1. If _func_.[[ECMAScriptCode]] Contains |SuperCall|, return *false*.
+      1. If _func_.[[ECMAScriptCode]] Contains |SuperProperty|, return *false*.
+      1. If _func_ does not have a [[FormalParameters]] internal slot, return *false*.
+      1. If _func_.[[FormalParameters]] Contains |SuperCall|, return *false*.
+      1. If _func_.[[FormalParameters]] Contains |SuperProperty|, return *false*.
+      1. If _func_.[[HomeObject]] is not *undefined*, return *false*.
+      1. Return *true*.
     </emu-alg>
 
     <emu-note>
