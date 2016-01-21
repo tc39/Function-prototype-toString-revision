@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/michaelficarra/Function-prototype-toString-revision#readme",
   "devDependencies": {
-    "ecmarkup": "^2.8.6"
+    "ecmarkup": "3.0.0"
   }
 }
