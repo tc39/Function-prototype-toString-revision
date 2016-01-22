@@ -1,5 +1,5 @@
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-TEMP_BRANCH=$(date | md5sum | cut -d ' ' -f 1)
+TEMP_BRANCH=$(date +%s.%N | md5sum | cut -d ' ' -f 1)
 if [ "$TRAVIS" == true ]; then
   CURRENT_BRANCH="$TRAVIS_BRANCH"
   echo "TRAVIS_SECURE_ENV_VARS=$TRAVIS_SECURE_ENV_VARS"
