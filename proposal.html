@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
 <script src="ecmarkup.js"></script>
 <pre class=metadata>
-title: Function.prototype.toString revision and Function.prototype.isPortable addition
+title: Function.prototype.toString revision
 status: proposal
 stage: 1
 contributors: Michael Ficarra
@@ -31,50 +31,8 @@ toc: true
   <p>The revised goals of this proposal also include</p>
 
   <ul>
-    <li>define concept of "portability" in `Function.prototype.isPortable`
-    <li>make a guarantee about the behaviour of portable functions after deserialisation in a lexical context equivalent to the definition site
+    <li>ensure that the string's parse contains the same function body and parameter list as the original
   </ul>
-
-  <h2>Definition of portability</h2>
-
-  <p>
-    A function _F_ defined in a lexical context _L_ is <dfn>portable</dfn> if any function generated from the evaluation of `F.toString()` in _L_ has a [[Call]] internal method that is indistinguishable from F.[[Call]].
-  </p>
-
-  <h3>So what is <em>not</em> portable?</h3>
-
-  <emu-table>
-    <table>
-      <thead>
-        <tr>
-          <th>Feature</th>
-          <th>Portable?</th>
-          <th>Why?</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Functions with lexical closure</td><td>Yes</td><td>Part of lexical context</td></tr>
-        <tr><td>Functions defined in strict mode code</td><td>Yes</td><td>Part of lexical context</td></tr>
-        <tr><td>Functions mentioning *this*</td><td>Yes</td><td>Part of Execution Context</td></tr>
-        <tr><td>Functions with free variables</td><td>Yes</td><td>Part of Execution Context</td></tr>
-        <tr><td>Functions mentioning new.target</td><td>Yes</td><td>Part of Execution Context</td></tr>
-        <tr><td>Arrows mentioning `arguments`</td><td>Yes</td><td>Part of Execution Context</td></tr>
-        <tr><td>Arrows mentioning `this`</td><td>Yes</td><td>Part of Execution Context</td></tr>
-        <tr><td>Functions in WithStatement</td><td>Yes</td><td>Part of Execution Context</td></tr>
-        <tr><td>Classes</td><td>Yes</td><td>[[Call]] always throws TypeError; in future, call constructors should be preserved</td></tr>
-        <tr><td>Super calls</td><td>No</td><td>[[HomeObject]] is static but not part of lexical context</td></tr>
-        <tr><td>Super properties</td><td>No</td><td>[[HomeObject]] is static but not part of lexical context</td></tr>
-        <tr><td>Methods</td><td>No</td><td>Methods aren't "evaluated", they are "defined"</td></tr>
-        <tr><td>Bound functions</td><td>No</td><td>Infeasible</td></tr>
-        <tr><td>Native functions</td><td>No</td><td>Infeasible</td></tr>
-        <tr><td>Non-function callable objects</td><td>No</td><td>Infeasible</td></tr>
-      </tbody>
-    </table>
-  </emu-table>
-
-  <p>
-    Functions that are not portable make use of a value that is determined statically but is not part of the lexical context (not to be confused with the runtime component of an Execution Context, Lexical Environment). The lexical context is simply a list of bound names and the strict/sloppy mode status.
-  </p>
 </emu-intro>
 
 <!-- es6num="19.2.3.5" -->
@@ -111,18 +69,17 @@ toc: true
     <p>`toString` Representation Requirements:</p>
 
     <ul>
-      <li>If IsPortable(_func_) is *true*, then the string representation must be such that if the string is evaluated in a lexical context that is equivalent to the lexical context used to create _func_, an object _g_ will be created such that _g_.[[Call]] is indistinguishable from _func_.[[Call]]. Additionally, the values of the *"length"* and *"name"* fields of *g* must be SameValue to the values of the corresponding fields of *func*.
-        <emu-note>Should we explicitly state that each of the internal slots will be the same?</emu-note>
-      <li>If _func_ was defined using |FunctionExpression| or |FunctionDeclaration|, then the string representation must have the syntax of a |FunctionExpression|.
-      <li>Else if _func_ was defined using |ClassExpression| or |ClassDeclaration|, then the string representation must have the syntax of a |ClassExpression|.
-      <li>Else if _func_ was defined using |GeneratorExpression| or |GeneratorDeclaration|, then the string representation must have the syntax of a |GeneratorExpression|.
-      <li>Else if _func_ was defined using |ArrowFunction|, then the string representation must have the syntax of an |ArrowFunction|.
-      <li>Else if _func_ was defined using |GeneratorMethod|, then the string representation must have the syntax of a |GeneratorMethod|.
-      <li>Else if _func_ was defined using |Getter|, then the string representation must have the syntax of a |Getter|.
-      <li>Else if _func_ was defined using |Setter|, then the string representation must have the syntax of a |Setter|.
-      <li>Else if _func_ was defined using |MethodDefinition|, then the string representation must have the syntax of a |MethodDefinition|.
-      <li>Else, the string representation must have the syntax of a |FunctionExpression|.
-      <emu-note>If we want to be more explicit here, I can have FunctionInitialize/FunctionCreate set an internal slot with this info</emu-note>
+      <li>If _func_ was defined using |FunctionExpression| or |FunctionDeclaration|, then a parse of the string representation using |FunctionExpression| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position and _func_.[[FormalParameters]] in the |FormalParameters| position.
+      <li>Else if _func_ was defined using |ClassExpression| or |ClassDeclaration|, then a parse of the string representation using |ClassExpression| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position of the constructor method and _func_.[[FormalParameters]] in the |StrictFormalParameters| position of the constructor method.
+      <li>Else if _func_ was defined using |GeneratorExpression| or |GeneratorDeclaration|, then a parse of the string representation using |GeneratorExpression| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |GeneratorBody| position and _func_.[[FormalParameters]] in the |FormalParameters| position.
+      <li>Else if _func_ was defined using |ArrowFunction|, then a parse of the string representation using |ArrowFunction| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |ConciseBody| position and _func_.[[FormalParameters]] in the |ArrowParameters| position.
+      <li>Else if _func_ was defined using |GeneratorMethod|, then a parse of the string representation using |GeneratorMethod| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |GeneratorBody| position and _func_.[[FormalParameters]] in the |StrictFormalParameters| position.
+      <li>Else if _func_ was defined using |Getter|, then a parse of the string representation using |Getter| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position.
+      <li>Else if _func_ was defined using |Setter|, then a parse of the string representation using |Setter| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position and _func_.[[FormalParameters]] in the |PropertySetParameterList| position.
+      <li>Else if _func_ was defined using |MethodDefinition|, then a parse of the string representation using |MethodDefinition| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position and _func_.[[FormalParameters]] in the |StrictFormalParameters| position.
+      <li>Else, the string representation must have the syntax of a |FunctionExpression|. If _func_ has an [[ECMAScriptCode]] internal slot, then additionally a parse of the string representation using |FunctionExpression| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position. If _func_ has a [[FormalParameters]] internal slot, then additionally a parse of the string representation using |FunctionExpression| as the goal symbol must succeed with a parse tree having _func_.[[FormalParameters]] in the |FormalParameters| position.
+      <emu-note>If we want to be more explicit here, I can have FunctionInitialize/FunctionCreate set an internal slot with info about the original representation</emu-note>
+      <emu-note>Do we preserve function name? If so, do unnamed FDs and CDs in export default position cause problems here?</emu-note>
       <emu-note>Functions created using the Function constructor are not defined using ECMAScript code, but do have an [[ECMAScriptCode]] internal slot.</emu-note>
     </ul>
 
@@ -139,22 +96,9 @@ toc: true
   </ins>
 </emu-clause>
 
-<emu-clause id="sec-function.prototype.isportable">
+<emu-clause id="sec-freeofanyfunnybusiness" aoid="FreeOfAnyFunnyBusiness">
   <ins class="block">
-    <h1>Function.prototype.isPortable()</h1>
-
-    <p>When the `isPortable` method is called with an object _func_ as its *this* value, the following steps are taken:</p>
-
-    <emu-alg>
-      1. If Type(_func_) is not Object or IsCallable(_func_) is *false*, throw a *TypeError* exception.
-      1. Return IsPortable(_func_).
-    </emu-alg>
-  </ins>
-</emu-clause>
-
-<emu-clause id="sec-isportable" aoid="IsPortable">
-  <ins class="block">
-    <h1>IsPortable(_func_)</h1>
+    <h1>FreeOfAnyFunnyBusiness(_func_)</h1>
 
     <emu-alg>
       1. Assert: Type(_func_) is Object.
@@ -169,14 +113,7 @@ toc: true
     </emu-alg>
 
     <emu-note>
-      The abstract operation IsPortable determines if this function may be serialiased and deserialised in an equivalent lexical context while preserving [[Call]] behaviour.
+      The abstract operation HasFunnyBusiness determines if this function can be serialiased as an expression.
     </emu-note>
-  </ins>
-</emu-clause>
-
-<emu-clause id="sec-reflect.isportable">
-  <ins class="block">
-    <h1>Relect.isPortable(_func_)</h1>
-    <emu-note>is this necessary?</emu-note>
   </ins>
 </emu-clause>
