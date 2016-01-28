@@ -61,8 +61,7 @@ toc: true
   <ins class="block">
     <emu-alg>
       1. If _func_ is a Bound Function exotic object, then return an implementation-dependent string source code representation of _func_. It is implementation dependent whether the representation includes bound function information or information about the target function. The representation must conform to the `toString` Representation Requirements below.
-      1. If Type(_func_) is Object and _func_ has an [[ECMAScriptCode]] internal slot, then return an implementation-dependent string source code representation of _func_. The representation must conform to the `toString` Representation Requirements below.
-      1. If Type(_func_) is Object and IsCallable(_func_) is *true*, return an implementation-dependent string source code representation of _func_ which has the syntax of a |NativeFunction|.
+      1. If Type(_func_) is Object and IsCallable(_func_) is *true*, then return an implementation-dependent string source code representation of _func_. The representation must conform to the `toString` Representation Requirements below.
       1. Throw a *TypeError* exception.
     </emu-alg>
 
