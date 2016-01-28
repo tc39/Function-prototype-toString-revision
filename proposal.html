@@ -128,25 +128,3 @@ toc: true
 
   <emu-note>Other existing references to the 3rd and 4th alternatives in the MethodDefinition grammar will need to be changed.</emu-note>
 </emu-clause>
-
-<emu-clause id="sec-freeofanyfunnybusiness" aoid="FreeOfAnyFunnyBusiness">
-  <ins class="block">
-    <h1>FreeOfAnyFunnyBusiness(_func_)</h1>
-
-    <emu-alg>
-      1. Assert: Type(_func_) is Object.
-      1. If _func_ does not have an [[ECMAScriptCode]] internal slot, return *false*.
-      1. If _func_.[[ECMAScriptCode]] Contains |SuperCall|, return *false*.
-      1. If _func_.[[ECMAScriptCode]] Contains |SuperProperty|, return *false*.
-      1. If _func_ does not have a [[FormalParameters]] internal slot, return *false*.
-      1. If _func_.[[FormalParameters]] Contains |SuperCall|, return *false*.
-      1. If _func_.[[FormalParameters]] Contains |SuperProperty|, return *false*.
-      1. If _func_.[[HomeObject]] is not *undefined*, return *false*.
-      1. Return *true*.
-    </emu-alg>
-
-    <emu-note>
-      The abstract operation HasFunnyBusiness determines if this function can be serialiased as an expression.
-    </emu-note>
-  </ins>
-</emu-clause>
