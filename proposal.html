@@ -86,14 +86,42 @@ toc: true
     <emu-grammar>
       NativeFunction :
         `function` BindingIdentifier? `(` FormalParameters `)` `{` `[` `native` `code` `]` `}`
-      Getter :
-        `get` PropertyName `(` `)` `{` FunctionBody `}`
-      Setter :
-        `set` PropertyName `(` PropertySetParameterList `)` `{` FunctionBody `}`
     </emu-grammar>
-
-    <emu-note>|Getter| and |Setter| are convenient names for two of the alternatives of the |MethodDefinition| grammar. A final version of this proposal will reference these names within the |MethodDefinition| grammar and move these definitions to section 14.3.</emu-note>
   </ins>
+</emu-clause>
+
+<!-- es6num="14.3" -->
+<emu-clause id="sec-method-definitions">
+  <h1>Method Definitions</h1>
+  <h2>Syntax</h2>
+
+  <del class="block">
+    <emu-grammar>
+      MethodDefinition[Yield] :
+        PropertyName[?Yield] `(` StrictFormalParameters `)` `{` FunctionBody `}`
+        GeneratorMethod[?Yield]
+        `get` PropertyName[?Yield] `(` `)` `{` FunctionBody `}`
+        `set` PropertyName[?Yield] `(` PropertySetParameterList `)` `{` FunctionBody `}`
+    </emu-grammar>
+  </del>
+
+  <ins class="block">
+    <emu-grammar>
+      MethodDefinition[Yield] :
+        PropertyName[?Yield] `(` StrictFormalParameters `)` `{` FunctionBody `}`
+        GeneratorMethod[?Yield]
+        Getter[?Yield]
+        Setter[?Yield]
+
+      Getter[Yield] :
+        `get` PropertyName[?Yield] `(` `)` `{` FunctionBody `}`
+
+      Setter[Yield] :
+        `set` PropertyName[?Yield] `(` PropertySetParameterList `)` `{` FunctionBody `}`
+    </emu-grammar>
+  </ins>
+
+  <emu-note>Other existing references to the 3rd and 4th alternatives in the MethodDefinition grammar will need to be changed.</emu-note>
 </emu-clause>
 
 <emu-clause id="sec-freeofanyfunnybusiness" aoid="FreeOfAnyFunnyBusiness">
