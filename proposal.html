@@ -70,7 +70,11 @@ toc: true
 
     <ul>
       <li>If _func_ was defined using |FunctionExpression| or |FunctionDeclaration|, then a parse of the string representation using |FunctionExpression| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position and _func_.[[FormalParameters]] in the |FormalParameters| position.
-      <li>Else if _func_ was defined using |ClassExpression| or |ClassDeclaration|, then a parse of the string representation using |ClassExpression| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position of the constructor method and _func_.[[FormalParameters]] in the |StrictFormalParameters| position of the constructor method.
+      <li>Else if _func_ was defined using |ClassExpression| or |ClassDeclaration|,
+        <ul>
+          <li>If a parse of <code>constructor(...args){ super(...args); }</code> or <code>constructor(){}</code> using |MethodDefinition| as the goal symbol succeeds with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position and _func_.[[FormalParameters]] in the |StrictFormalParameters| position, then the string representation must have the syntax of a |ClassExpression|.
+          <li>Else, a parse of the string representation using |ClassExpression| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |FunctionBody| position of the constructor method and _func_.[[FormalParameters]] in the |StrictFormalParameters| position of the constructor method.
+        </ul>
       <li>Else if _func_ was defined using |GeneratorExpression| or |GeneratorDeclaration|, then a parse of the string representation using |GeneratorExpression| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |GeneratorBody| position and _func_.[[FormalParameters]] in the |FormalParameters| position.
       <li>Else if _func_ was defined using |ArrowFunction|, then a parse of the string representation using |ArrowFunction| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |ConciseBody| position and _func_.[[FormalParameters]] in the |ArrowParameters| position.
       <li>Else if _func_ was defined using |GeneratorMethod|, then a parse of the string representation using |GeneratorMethod| as the goal symbol must succeed with a parse tree having _func_.[[ECMAScriptCode]] in the |GeneratorBody| position and _func_.[[FormalParameters]] in the |StrictFormalParameters| position.
