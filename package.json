@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/michaelficarra/Function-prototype-toString-revision.git"
+    "url": "git+ssh://git@github.com/tc39/Function-prototype-toString-revision.git"
   },
   "keywords": [
     "ECMA-262",
@@ -23,9 +23,9 @@
   "author": "Michael Ficarra",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/michaelficarra/Function-prototype-toString-revision/issues"
+    "url": "https://github.com/tc39/Function-prototype-toString-revision/issues"
   },
-  "homepage": "https://github.com/michaelficarra/Function-prototype-toString-revision#readme",
+  "homepage": "https://github.com/tc39/Function-prototype-toString-revision#readme",
   "devDependencies": {
     "ecmarkup": "3.0.0"
   }
