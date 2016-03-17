@@ -28,10 +28,20 @@ toc: true
     <li>clarify requirement of representation based on the "actual characteristics" of an object
   </ul>
 
-  <p>The revised goals of this proposal also include</p>
+  <p>The goals were later revised to include</p>
 
   <ul>
     <li>ensure that the string's parse contains the same function body and parameter list as the original
+  </ul>
+
+  <p>The goals were revised again to include</p>
+
+  <ul>
+    <li>for functions defined using ECMAScript code, `toString` must return source text slice from beginning of first token to end of last token matched by the appropriate grammar production
+    <li>for built-in function objects and bound function exotic objects, `toString` must not return anything other than |NativeFunction|
+    <li>for callable objects which were not defined using ECMAScript code, `toString` must return |NativeFunction|
+    <li>for functions created dynamically (through the *Function* and *GeneratorFunction* constructors), `toString` must synthesise a source text
+    <li>for all other objects, `toString` must throw a *TypeError* exception
   </ul>
 </emu-intro>
 
