@@ -484,14 +484,14 @@ toc: true
     <emu-alg>
       1. If _func_ is a <emu-xref href="#sec-bound-function-exotic-objects">Bound Function exotic object</emu-xref> or a <emu-xref href="#sec-ecmascript-standard-built-in-objects">built-in Function object</emu-xref>, then return an implementation-dependent string source code representation of _func_. The representation must have the syntax of a |NativeFunction|.
       1. If _func_ has a [[SourceText]] internal slot and _func_.[[SourceText]] is not *undefined*
-        1. Let *sourceText* be _func_.[[SourceText]].
-        1. Repeat while *sourceText* contains the code unit 0x000D (CARRIAGE RETURN) followed by the code unit 0x000A (LINE FEED)
-          1. Let *pos* be the index within *sourceText* of the first occurrence of the code unit 0x000D (CARRIAGE RETURN) followed by the code unit 0x000A (LINE FEED).
-          1. Let *sourceText* be the string formed by concatenating the first *pos* + 1 code units of *sourceText* with the trailing substring of *sourceText* starting at index *pos* + 2.
-        1. Repeat while *sourceText* contains the code unit 0x000D (CARRIAGE RETURN)
-          1. Let *pos* be the index within *sourceText* of the first occurrence of the code unit 0x000D (CARRIAGE RETURN).
-          1. Let *sourceText* be the string formed by concatenating the first *pos* code units of *sourceText* with the trailing substring of *sourceText* starting at index *pos* + 1.
-        1. Return *sourceText*.
+        1. Let _sourceText_ be _func_.[[SourceText]].
+        1. Repeat while _sourceText_ contains the code unit 0x000D (CARRIAGE RETURN) followed by the code unit 0x000A (LINE FEED)
+          1. Let _pos_ be the index within _sourceText_ of the first occurrence of the code unit 0x000D (CARRIAGE RETURN) followed by the code unit 0x000A (LINE FEED).
+          1. Let _sourceText_ be the string formed by concatenating the first _pos_ + 1 code units of _sourceText_ with the trailing substring of _sourceText_ starting at index _pos_ + 2.
+        1. Repeat while _sourceText_ contains the code unit 0x000D (CARRIAGE RETURN)
+          1. Let _pos_ be the index within _sourceText_ of the first occurrence of the code unit 0x000D (CARRIAGE RETURN).
+          1. Let _sourceText_ be the string formed by concatenating the first _pos_ code units of _sourceText_ with the trailing substring of _sourceText_ starting at index _pos_ + 1.
+        1. Return _sourceText_.
       1. If Type(_func_) is Object and IsCallable(_func_) is *true*, then return an implementation-dependent string source code representation of _func_. The representation must have the syntax of a |NativeFunction|.
       1. Throw a *TypeError* exception.
     </emu-alg>
