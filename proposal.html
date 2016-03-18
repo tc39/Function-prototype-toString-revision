@@ -11,6 +11,7 @@ contributors: Michael Ficarra
 toc: true
 </pre>
 
+
 <emu-intro>
   <h1>Introduction</h1>
   <h2>Goals</h2>
@@ -46,6 +47,13 @@ toc: true
 </emu-intro>
 
 
+<!-- TODO: remove when https://github.com/bterlson/ecmarkup/pull/82 is merged and released -->
+<style>
+  tr.ins, li.ins { background-color: #e0f8e0; text-decoration: none; border-bottom: 1px solid #396; }
+  tr.ins > td > ins, li.ins > ins { border-bottom: 0; }
+</style>
+
+
 <!-- 9.2 -->
 <emu-clause id="sec-ecmascript-function-objects">
   <h1>(<a href="http://tc39.github.io/ecma262/#sec-ecmascript-function-objects">9.2</a>) ECMAScript Function Objects</h1>
@@ -65,10 +73,10 @@ toc: true
       <tr><td>[[ThisMode]]</td><td>(lexical, strict, global)</td><td>Defines how `this` references are interpreted within the formal parameters and code body of the function. ~lexical~ means that `this` refers to the *this* value of a lexically enclosing function. ~strict~ means that the *this* value is used exactly as provided by an invocation of the function. ~global~ means that a *this* value of *undefined* is interpreted as a reference to the global object.</td></tr>
       <tr><td>[[Strict]]</td><td>Boolean</td><td>*true* if this is a strict mode function, *false* if this is not a strict mode function.</td></tr>
       <tr><td>[[HomeObject]]</td><td>Object</td><td>If the function uses `super`, this is the object whose [[GetPrototypeOf]] provides the object where `super` property lookups begin.</td></tr>
-      <tr class="ins" style="background-color: #e0f8e0; text-decoration: none; border-bottom: 1px solid #396;">
-        <td>[[SourceText]]</td>
-        <td>String</td>
-        <td>The <emu-xref href="#sec-source-text">source text</emu-xref> that defines the function.</td>
+      <tr class="ins">
+        <td><ins>[[SourceText]]</ins></td>
+        <td><ins>String</ins></td>
+        <td><ins>The <emu-xref href="#sec-source-text">source text</emu-xref> that defines the function.</ins></td>
       </tr>
       </tbody>
     </table>
