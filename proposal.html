@@ -449,7 +449,7 @@ toc: true
     1. Else, perform MakeConstructor(_F_).
     1. Perform SetFunctionName(_F_, `"anonymous"`).
     1. <ins>If _kind_ is `"generator"`, let _keyword_ be `"function*"`. Otherwise, let _keyword_ be `"function"`.</ins>
-    1. <ins>Let _sourceText_ be the string containing all the code units of _keyword_ followed by all the code units of `" anonymous("`, all the code units of _P_, all the code units of `") {"`, all the code units of _bodyText_, and all the code units of `"}"`.</ins>
+    1. <ins>Let _sourceText_ be the String value whose elements are, in order, all the code units of _keyword_, all the code units of `" anonymous("`, all the code units of _P_, all the code units of `") {"`, all the code units of _bodyText_, and all the code units of `"}"`.</ins>
     1. <ins>Set the [[SourceText]] internal slot of _F_ to _sourceText_.</ins>
     1. Return _F_.
   </emu-alg>
