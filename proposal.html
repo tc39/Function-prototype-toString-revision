@@ -355,7 +355,9 @@ toc: true
   </emu-alg>
   <emu-grammar>ClassDeclaration : `class` ClassTail</emu-grammar>
   <emu-alg>
-    1. Return the result of ClassDefinitionEvaluation of |ClassTail| with argument *undefined*.
+    1. <del>Return</del><ins>Let _value_ be</ins> the result of ClassDefinitionEvaluation of |ClassTail| with argument *undefined*.
+    1. <ins>Set the [[SourceText]] internal slot of _value_ to the source text matched by |ClassDeclaration|.</ins>
+    1. <ins>Return _value_.</ins>
   </emu-alg>
   <emu-note>
     <p><emu-grammar>ClassDeclaration : `class` ClassTail</emu-grammar> only occurs as part of an |ExportDeclaration| and the setting of a name property and establishing its binding are handled as part of the evaluation action for that production. See <emu-xref href="#sec-exports-runtime-semantics-evaluation"></emu-xref>.</p>
