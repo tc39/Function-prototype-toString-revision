@@ -489,7 +489,7 @@ toc: true
       1. If _func_ has a [[SourceText]] internal slot and _func_.[[SourceText]] is not *undefined*
         1. Let _sourceText_ be _func_.[[SourceText]].
         1. Let _sourceText_ be _sourceText_ with all occurrences of the code unit sequence 0x000D (CARRIAGE RETURN) 0x000A (LINE FEED) replaced with the single code unit 0x000A (LINE FEED).
-        1. Let _sourceText_ be _sourceText_ with all occurrences of the code unit 0x000D (CARRIAGE RETURN) removed.
+        1. Let _sourceText_ be _sourceText_ with all occurrences of the code unit 0x000D (CARRIAGE RETURN) replaced with 0x000A (LINE FEED).
         1. Return _sourceText_.
       1. If Type(_func_) is Object and IsCallable(_func_) is *true*, then return an implementation-dependent String source code representation of _func_. The representation must have the syntax of a |NativeFunction|.
       1. Throw a *TypeError* exception.
