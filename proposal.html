@@ -485,7 +485,7 @@ toc: true
 
   <ins class="block">
     <emu-alg>
-      1. If _func_ is a <emu-xref href="#sec-bound-function-exotic-objects">Bound Function exotic object</emu-xref> or a <emu-xref href="#sec-ecmascript-standard-built-in-objects">built-in Function object</emu-xref>, then return an implementation-dependent String source code representation of _func_. The representation must have the syntax of a |NativeFunction|.
+      1. If _func_ is a <emu-xref href="#sec-bound-function-exotic-objects">Bound Function exotic object</emu-xref> or a <emu-xref href="#sec-ecmascript-standard-built-in-objects">built-in Function object</emu-xref>, then return an implementation-dependent String source code representation of _func_. The representation must have the syntax of a |NativeFunction|. Additionally, if _func_ is a <emu-xref href="#sec-well-known-intrinsic-objects">Well-known Intrinsic Object</emu-xref> and the Global Name associated with _func_ has the syntax of a |BindingIdentifier|, the portion of the returned String that would be matched by |BindingIdentifier| must be the same as the Global Name associated with _func_.
       1. If _func_ has a [[SourceText]] internal slot and _func_.[[SourceText]] is not *undefined*
         1. Let _sourceText_ be _func_.[[SourceText]].
         1. Let _sourceText_ be _sourceText_ with all occurrences of the code unit sequence 0x000D (CARRIAGE RETURN) 0x000A (LINE FEED) replaced with the single code unit 0x000A (LINE FEED).
