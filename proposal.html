@@ -543,3 +543,20 @@ toc: true
     </emu-grammar>
   </ins>
 </emu-clause>
+
+
+<!-- es6num="9.2.7.1" -->
+<emu-clause id="sec-%throwtypeerror%">
+  <h1>(<a href="#sec-%throwtypeerror%">9.2.7.1</a>) %ThrowTypeError% ( )</h1>
+  <p>The <dfn>%ThrowTypeError%</dfn> intrinsic is a<del>n anonymous</del> built-in function object that is defined once for each realm. When %ThrowTypeError% is called it performs the following steps:</p>
+  <emu-alg>
+    1. Throw a *TypeError* exception.
+  </emu-alg>
+  <p>
+    <ins>
+      The value of the `name` property of %ThrowTypeError% is `"ThrowTypeError"`.
+    </ins>
+  </p>
+  <p>The value of the [[Extensible]] internal slot of a %ThrowTypeError% function is *false*.</p>
+  <p>The `length` property of a %ThrowTypeError% function has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
+</emu-clause>
