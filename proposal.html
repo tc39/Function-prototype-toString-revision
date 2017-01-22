@@ -140,7 +140,7 @@ toc: true
     1. Let _F_ be FunctionCreate(~Normal~, |FormalParameters|, |FunctionBody|, _scope_, _strict_).
     1. Perform MakeConstructor(_F_).
     1. Perform SetFunctionName(_F_, _name_).
-    1. <ins>Set the [[SourceText]] internal slot of _F_ to the source text matched by |FunctionDeclaration|.</ins>
+    1. <ins>Set _F_.[[SourceText]] to the source text matched by |FunctionDeclaration|.</ins>
     1. Return _F_.
   </emu-alg>
   <emu-grammar>FunctionDeclaration : `function` `(` FormalParameters `)` `{` FunctionBody `}`</emu-grammar>
@@ -149,7 +149,7 @@ toc: true
     1. Let _F_ be FunctionCreate(~Normal~, |FormalParameters|, |FunctionBody|, _scope_, _strict_).
     1. Perform MakeConstructor(_F_).
     1. Perform SetFunctionName(_F_, `"default"`).
-    1. <ins>Set the [[SourceText]] internal slot of _F_ to the source text matched by |FunctionDeclaration|.</ins>
+    1. <ins>Set _F_.[[SourceText]] to the source text matched by |FunctionDeclaration|.</ins>
     1. Return _F_.
   </emu-alg>
   <emu-note>
@@ -178,7 +178,7 @@ toc: true
     1. Let _scope_ be the LexicalEnvironment of the running execution context.
     1. Let _closure_ be FunctionCreate(~Normal~, |FormalParameters|, |FunctionBody|, _scope_, _strict_).
     1. Perform MakeConstructor(_closure_).
-    1. <ins>Set the [[SourceText]] internal slot of _closure_ to the source text matched by |FunctionExpression|.</ins>
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |FunctionExpression|.</ins>
     1. Return _closure_.
   </emu-alg>
   <emu-grammar>FunctionExpression : `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`</emu-grammar>
@@ -192,7 +192,7 @@ toc: true
     1. Let _closure_ be FunctionCreate(~Normal~, |FormalParameters|, |FunctionBody|, _funcEnv_, _strict_).
     1. Perform MakeConstructor(_closure_).
     1. Perform SetFunctionName(_closure_, _name_).
-    1. <ins>Set the [[SourceText]] internal slot of _closure_ to the source text matched by |FunctionExpression|.</ins>
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |FunctionExpression|.</ins>
     1. Perform _envRec_.InitializeBinding(_name_, _closure_).
     1. Return _closure_.
   </emu-alg>
@@ -218,7 +218,7 @@ toc: true
     1. Let _scope_ be the LexicalEnvironment of the running execution context.
     1. Let _parameters_ be CoveredFormalsList of |ArrowParameters|.
     1. Let _closure_ be FunctionCreate(~Arrow~, _parameters_, |ConciseBody|, _scope_, _strict_).
-    1. <ins>Set the [[SourceText]] internal slot of _closure_ to the source text matched by |ArrowFunction|.</ins>
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |ArrowFunction|.</ins>
     1. Return _closure_.
   </emu-alg>
   <emu-note>
@@ -240,7 +240,7 @@ toc: true
     1. If _functionPrototype_ was passed as a parameter, let _kind_ be ~Normal~; otherwise let _kind_ be ~Method~.
     1. Let _closure_ be FunctionCreate(_kind_, |StrictFormalParameters|, |FunctionBody|, _scope_, _strict_). If _functionPrototype_ was passed as a parameter, then pass its value as the _prototype_ optional argument of FunctionCreate.
     1. Perform MakeMethod(_closure_, _object_).
-    1. <ins>Set the [[SourceText]] internal slot of _closure_ to the source text matched by |MethodDefinition|.</ins>
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |MethodDefinition|.</ins>
     1. Return the Record{[[Key]]: _propKey_, [[Closure]]: _closure_}.
   </emu-alg>
 </emu-clause>
@@ -271,7 +271,7 @@ toc: true
     1. Let _closure_ be FunctionCreate(~Method~, _formalParameterList_, |FunctionBody|, _scope_, _strict_).
     1. Perform MakeMethod(_closure_, _object_).
     1. Perform SetFunctionName(_closure_, _propKey_, `"get"`).
-    1. <ins>Set the [[SourceText]] internal slot of _closure_ to the source text matched by |MethodDefinition|.</ins>
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |MethodDefinition|.</ins>
     1. Let _desc_ be the PropertyDescriptor{[[Get]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true*}.
     1. Return ? DefinePropertyOrThrow(_object_, _propKey_, _desc_).
   </emu-alg>
@@ -284,7 +284,7 @@ toc: true
     1. Let _closure_ be FunctionCreate(~Method~, |PropertySetParameterList|, |FunctionBody|, _scope_, _strict_).
     1. Perform MakeMethod(_closure_, _object_).
     1. Perform SetFunctionName(_closure_, _propKey_, `"set"`).
-    1. <ins>Set the [[SourceText]] internal slot of _closure_ to the source text matched by |MethodDefinition|.</ins>
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |MethodDefinition|.</ins>
     1. Let _desc_ be the PropertyDescriptor{[[Set]]: _closure_, [[Enumerable]]: _enumerable_, [[Configurable]]: *true*}.
     1. Return ? DefinePropertyOrThrow(_object_, _propKey_, _desc_).
   </emu-alg>
@@ -304,7 +304,7 @@ toc: true
     1. Let _prototype_ be ObjectCreate(%GeneratorPrototype%).
     1. Perform DefinePropertyOrThrow(_F_, `"prototype"`, PropertyDescriptor{[[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false*}).
     1. Perform SetFunctionName(_F_, _name_).
-    1. <ins>Set the [[SourceText]] internal slot of _F_ to the source text matched by |GeneratorDeclaration|.</ins>
+    1. <ins>Set _F_.[[SourceText]] to the source text matched by |GeneratorDeclaration|.</ins>
     1. Return _F_.
   </emu-alg>
   <emu-grammar>GeneratorDeclaration : `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
@@ -314,7 +314,7 @@ toc: true
     1. Let _prototype_ be ObjectCreate(%GeneratorPrototype%).
     1. Perform DefinePropertyOrThrow(_F_, `"prototype"`, PropertyDescriptor{[[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false*}).
     1. Perform SetFunctionName(_F_, `"default"`).
-    1. <ins>Set the [[SourceText]] internal slot of _F_ to the source text matched by |GeneratorDeclaration|.</ins>
+    1. <ins>Set _F_.[[SourceText]] to the source text matched by |GeneratorDeclaration|.</ins>
     1. Return _F_.
   </emu-alg>
   <emu-note>
@@ -339,7 +339,7 @@ toc: true
     1. Let _prototype_ be ObjectCreate(%GeneratorPrototype%).
     1. Perform DefinePropertyOrThrow(_closure_, `"prototype"`, PropertyDescriptor{[[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false*}).
     1. Perform SetFunctionName(_closure_, _propKey_).
-    1. <ins>Set the [[SourceText]] internal slot of _closure_ to the source text matched by |GeneratorMethod|.</ins>
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |GeneratorMethod|.</ins>
     1. Let _desc_ be the PropertyDescriptor{[[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true*}.
     1. Return ? DefinePropertyOrThrow(_object_, _propKey_, _desc_).
   </emu-alg>
@@ -356,7 +356,7 @@ toc: true
     1. Let _closure_ be GeneratorFunctionCreate(~Normal~, |FormalParameters|, |GeneratorBody|, _scope_, _strict_).
     1. Let _prototype_ be ObjectCreate(%GeneratorPrototype%).
     1. Perform DefinePropertyOrThrow(_closure_, `"prototype"`, PropertyDescriptor{[[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false*}).
-    1. <ins>Set the [[SourceText]] internal slot of _closure_ to the source text matched by |GeneratorExpression|.</ins>
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |GeneratorExpression|.</ins>
     1. Return _closure_.
   </emu-alg>
   <emu-grammar>GeneratorExpression : `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
@@ -372,7 +372,7 @@ toc: true
     1. Perform DefinePropertyOrThrow(_closure_, `"prototype"`, PropertyDescriptor{[[Value]]: _prototype_, [[Writable]]: *true*, [[Enumerable]]: *false*, [[Configurable]]: *false*}).
     1. Perform SetFunctionName(_closure_, _name_).
     1. Perform _envRec_.InitializeBinding(_name_, _closure_).
-    1. <ins>Set the [[SourceText]] internal slot of _closure_ to the source text matched by |GeneratorExpression|.</ins>
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |GeneratorExpression|.</ins>
     1. Return _closure_.
   </emu-alg>
   <emu-note>
@@ -391,7 +391,7 @@ toc: true
     1. ReturnIfAbrupt(_value_).
     1. Let _hasNameProperty_ be ? HasOwnProperty(_value_, `"name"`).
     1. If _hasNameProperty_ is *false*, perform SetFunctionName(_value_, _className_).
-    1. <ins>Set the [[SourceText]] internal slot of _value_ to the source text matched by |ClassDeclaration|.</ins>
+    1. <ins>Set _value_.[[SourceText]] to the source text matched by |ClassDeclaration|.</ins>
     1. Let _env_ be the running execution context's LexicalEnvironment.
     1. Perform ? InitializeBoundName(_className_, _value_, _env_).
     1. Return _value_.
@@ -399,7 +399,7 @@ toc: true
   <emu-grammar>ClassDeclaration : `class` ClassTail</emu-grammar>
   <emu-alg>
     1. <del>Return</del><ins>Let _value_ be</ins> the result of ClassDefinitionEvaluation of |ClassTail| with argument *undefined*.
-    1. <ins>Set the [[SourceText]] internal slot of _value_ to the source text matched by |ClassDeclaration|.</ins>
+    1. <ins>Set _value_.[[SourceText]] to the source text matched by |ClassDeclaration|.</ins>
     1. <ins>Return _value_.</ins>
   </emu-alg>
   <emu-note>
@@ -429,7 +429,7 @@ toc: true
       1. Let _hasNameProperty_ be ? HasOwnProperty(_value_, `"name"`).
       1. If _hasNameProperty_ is *false*, then
         1. Perform SetFunctionName(_value_, _className_).
-    1. <ins>Set the [[SourceText]] internal slot of _value_ to the source text matched by |ClassExpression|.</ins>
+    1. <ins>Set _value_.[[SourceText]] to the source text matched by |ClassExpression|.</ins>
     1. Return NormalCompletion(_value_).
   </emu-alg>
   <emu-note>
@@ -493,7 +493,7 @@ toc: true
     1. Perform SetFunctionName(_F_, `"anonymous"`).
     1. <ins>If _kind_ is `"generator"`, let _prefix_ be `"function*"`. Otherwise, let _prefix_ be `"function"`.</ins>
     1. <ins>Let _sourceText_ be the String value whose elements are, in order, the code units of _prefix_, the code units of `" anonymous("`, the code units of _P_, 0x000A (LINE FEED), the code units of `") {"`, 0x000A (LINE FEED), the code units of _bodyText_, 0x000A (LINE FEED), and the code units of `"}"`.</ins>
-    1. <ins>Set the [[SourceText]] internal slot of _F_ to _sourceText_.</ins>
+    1. <ins>Set _F_.[[SourceText]] to _sourceText_.</ins>
     1. Return _F_.
   </emu-alg>
   <emu-note>
