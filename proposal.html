@@ -1,19 +1,16 @@
 <!doctype html>
 <meta charset="utf8">
 <link rel="shortcut icon" href="https://tc39.github.io/ecma262/img/favicon.ico" />
-<link rel="stylesheet" href="ecmarkup.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
-<script src="ecmarkup.js"></script>
 <pre class=metadata>
 title: Function.prototype.toString revision
 status: proposal
 stage: 3
 contributors: Michael Ficarra
-toc: true
+location: https://github.com/tc39/Function-prototype-toString-revision
 </pre>
 
 
-<emu-intro>
+<emu-intro id="sec-introduction">
   <h1>Introduction</h1>
   <h2>Goals</h2>
 
@@ -49,8 +46,8 @@ toc: true
 
 
 <!-- es6num="5.2" -->
-<emu-clause id="sec-algorithm-conventions">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-algorithm-conventions">5.2</a>) Algorithm Conventions</h1>
+<emu-clause id="proposal-sec-algorithm-conventions">
+  <h1>(<emu-xref href="#sec-algorithm-conventions">5.2</emu-xref>) Algorithm Conventions</h1>
   <p>The specification often uses a numbered list to specify steps in an algorithm. These algorithms are used to precisely specify the required semantics of ECMAScript language constructs. The algorithms are not intended to imply the use of any specific implementation technique. In practice, there may be more efficient algorithms available to implement a given feature.</p>
   <p>Algorithms may be explicitly parameterized, in which case the names and usage of the parameters must be provided as part of the algorithm's definition. In order to facilitate their use in multiple parts of this specification, some algorithms, called <em>abstract operations</em>, are named and written in parameterized functional form so that they may be referenced by name from within other algorithms. Abstract operations are typically referenced using a functional application style such as operationName(_arg1_, _arg2_). Some abstract operations are treated as polymorphically dispatched methods of class-like specification abstractions. Such method-like abstract operations are typically referenced using a method application style such as _someValue_.operationName(_arg1_, _arg2_).</p>
   <p>Calls to abstract operations return Completion Records. Abstract operations referenced using the functional application style and the method application style that are prefixed by `?` indicate that ReturnIfAbrupt should be applied to the resulting Completion Record. For example, ? operationName() is equivalent to ReturnIfAbrupt(operationName()). Similarly, ? _someValue_.operationName() is equivalent to ReturnIfAbrupt(_someValue_.operationName()).</p>
@@ -98,8 +95,8 @@ toc: true
 
 
 <!-- 9.2 -->
-<emu-clause id="sec-ecmascript-function-objects">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-ecmascript-function-objects">9.2</a>) ECMAScript Function Objects</h1>
+<emu-clause id="proposal-sec-ecmascript-function-objects">
+  <h1>(<emu-xref href="#sec-ecmascript-function-objects">9.2</emu-xref>) ECMAScript Function Objects</h1>
   <p>ECMAScript function objects encapsulate parameterized ECMAScript code closed over a lexical environment and support the dynamic evaluation of that code. An ECMAScript function object is an ordinary object and has the same internal slots and the same internal methods as other ordinary objects. The code of an ECMAScript function object may be either strict mode code (<emu-xref href="#sec-strict-mode-code"></emu-xref>) or non-strict mode code. An ECMAScript function object whose code is strict mode code is called a <em>strict function</em>. One whose code is not strict mode code is called a <em>non-strict function</em>.</p>
   <p>ECMAScript function objects have the additional internal slots listed in <emu-xref href="#table-27"></emu-xref>.</p>
   <emu-table id="table-27" caption="Internal Slots of ECMAScript Function Objects">
@@ -129,8 +126,8 @@ toc: true
 
 
 <!-- 14.1.19 -->
-<emu-clause id="sec-function-definitions-runtime-semantics-instantiatefunctionobject">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-function-definitions-runtime-semantics-instantiatefunctionobject">14.1.19</a>) Runtime Semantics: InstantiateFunctionObject</h1>
+<emu-clause id="proposal-sec-function-definitions-runtime-semantics-instantiatefunctionobject">
+  <h1>(<emu-xref href="#sec-function-definitions-runtime-semantics-instantiatefunctionobject">14.1.19</emu-xref>) Runtime Semantics: InstantiateFunctionObject</h1>
   <p>With parameter _scope_.</p>
   <emu-see-also-para op="InstantiateFunctionObject"></emu-see-also-para>
   <emu-grammar>FunctionDeclaration : `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`</emu-grammar>
@@ -159,8 +156,8 @@ toc: true
 
 
 <!-- 14.1.20 -->
-<emu-clause id="sec-function-definitions-runtime-semantics-evaluation">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-function-definitions-runtime-semantics-evaluation">14.1.20</a>) Runtime Semantics: Evaluation</h1>
+<emu-clause id="proposal-sec-function-definitions-runtime-semantics-evaluation">
+  <h1>(<emu-xref href="#sec-function-definitions-runtime-semantics-evaluation">14.1.20</emu-xref>) Runtime Semantics: Evaluation</h1>
   <emu-grammar>FunctionDeclaration : `function` BindingIdentifier `(` FormalParameters `)` `{` FunctionBody `}`</emu-grammar>
   <emu-alg>
     1. Return NormalCompletion(~empty~).
@@ -210,8 +207,8 @@ toc: true
 
 
 <!-- 14.2.16 -->
-<emu-clause id="sec-arrow-function-definitions-runtime-semantics-evaluation">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-arrow-function-definitions-runtime-semantics-evaluation">14.2.16</a>) Runtime Semantics: Evaluation</h1>
+<emu-clause id="proposal-sec-arrow-function-definitions-runtime-semantics-evaluation">
+  <h1>(<emu-xref href="#sec-arrow-function-definitions-runtime-semantics-evaluation">14.2.16</emu-xref>) Runtime Semantics: Evaluation</h1>
   <emu-grammar>ArrowFunction : ArrowParameters `=&gt;` ConciseBody</emu-grammar>
   <emu-alg>
     1. If the function code for this |ArrowFunction| is strict mode code, let _strict_ be *true*. Otherwise let _strict_ be *false*.
@@ -228,8 +225,8 @@ toc: true
 
 
 <!-- 14.3.8 -->
-<emu-clause id="sec-runtime-semantics-definemethod">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-runtime-semantics-definemethod">14.3.8</a>) Runtime Semantics: DefineMethod</h1>
+<emu-clause id="proposal-sec-runtime-semantics-definemethod">
+  <h1>(<emu-xref href="#sec-runtime-semantics-definemethod">14.3.8</emu-xref>) Runtime Semantics: DefineMethod</h1>
   <p>With parameters _object_ and optional parameter _functionPrototype_.</p>
   <emu-grammar>MethodDefinition : PropertyName `(` StrictFormalParameters `)` `{` FunctionBody `}`</emu-grammar>
   <emu-alg>
@@ -247,8 +244,8 @@ toc: true
 
 
 <!-- 14.3.9 -->
-<emu-clause id="sec-method-definitions-runtime-semantics-propertydefinitionevaluation">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-method-definitions-runtime-semantics-propertydefinitionevaluation">14.3.9</a>) Runtime Semantics: PropertyDefinitionEvaluation</h1>
+<emu-clause id="proposal-sec-method-definitions-runtime-semantics-propertydefinitionevaluation">
+  <h1>(<emu-xref href="#sec-method-definitions-runtime-semantics-propertydefinitionevaluation">14.3.9</emu-xref>) Runtime Semantics: PropertyDefinitionEvaluation</h1>
   <p>With parameters _object_ and _enumerable_.</p>
   <emu-see-also-para op="PropertyDefinitionEvaluation"></emu-see-also-para>
   <emu-grammar>MethodDefinition : PropertyName `(` StrictFormalParameters `)` `{` FunctionBody `}`</emu-grammar>
@@ -292,8 +289,8 @@ toc: true
 
 
 <!-- 14.4.12 -->
-<emu-clause id="sec-generator-function-definitions-runtime-semantics-instantiatefunctionobject">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-generator-function-definitions-runtime-semantics-instantiatefunctionobject">14.4.12</a>) Runtime Semantics: InstantiateFunctionObject</h1>
+<emu-clause id="proposal-sec-generator-function-definitions-runtime-semantics-instantiatefunctionobject">
+  <h1>(<emu-xref href="#sec-generator-function-definitions-runtime-semantics-instantiatefunctionobject">14.4.12</emu-xref>) Runtime Semantics: InstantiateFunctionObject</h1>
   <p>With parameter _scope_.</p>
   <emu-see-also-para op="InstantiateFunctionObject"></emu-see-also-para>
   <emu-grammar>GeneratorDeclaration : `function` `*` BindingIdentifier `(` FormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
@@ -324,8 +321,8 @@ toc: true
 
 
 <!-- 14.4.13 -->
-<emu-clause id="sec-generator-function-definitions-runtime-semantics-propertydefinitionevaluation">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-generator-function-definitions-runtime-semantics-propertydefinitionevaluation">14.4.13</a>) Runtime Semantics: PropertyDefinitionEvaluation</h1>
+<emu-clause id="proposal-sec-generator-function-definitions-runtime-semantics-propertydefinitionevaluation">
+  <h1>(<emu-xref href="#sec-generator-function-definitions-runtime-semantics-propertydefinitionevaluation">14.4.13</emu-xref>) Runtime Semantics: PropertyDefinitionEvaluation</h1>
   <p>With parameter _object_ and _enumerable_.</p>
   <emu-see-also-para op="PropertyDefinitionEvaluation"></emu-see-also-para>
   <emu-grammar>GeneratorMethod : `*` PropertyName `(` StrictFormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
@@ -347,8 +344,8 @@ toc: true
 
 
 <!-- 14.4.14 -->
-<emu-clause id="sec-generator-function-definitions-runtime-semantics-evaluation">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-generator-function-definitions-runtime-semantics-evaluation">14.4.14</a>) Runtime Semantics: Evaluation</h1>
+<emu-clause id="proposal-sec-generator-function-definitions-runtime-semantics-evaluation">
+  <h1>(<emu-xref href="#sec-generator-function-definitions-runtime-semantics-evaluation">14.4.14</emu-xref>) Runtime Semantics: Evaluation</h1>
   <emu-grammar>GeneratorExpression : `function` `*` `(` FormalParameters `)` `{` GeneratorBody `}`</emu-grammar>
   <emu-alg>
     1. If the function code for this |GeneratorExpression| is strict mode code, let _strict_ be *true*. Otherwise let _strict_ be *false*.
@@ -382,8 +379,8 @@ toc: true
 
 
 <!-- 14.5.15 -->
-<emu-clause id="sec-runtime-semantics-bindingclassdeclarationevaluation">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-runtime-semantics-bindingclassdeclarationevaluation">14.5.15</a>) Runtime Semantics: BindingClassDeclarationEvaluation</h1>
+<emu-clause id="proposal-sec-runtime-semantics-bindingclassdeclarationevaluation">
+  <h1>(<emu-xref href="#sec-runtime-semantics-bindingclassdeclarationevaluation">14.5.15</emu-xref>) Runtime Semantics: BindingClassDeclarationEvaluation</h1>
   <emu-grammar>ClassDeclaration : `class` BindingIdentifier ClassTail</emu-grammar>
   <emu-alg>
     1. Let _className_ be StringValue of |BindingIdentifier|.
@@ -408,8 +405,8 @@ toc: true
 </emu-clause>
 
 <!-- 14.5.16 -->
-<emu-clause id="sec-class-definitions-runtime-semantics-evaluation">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-class-definitions-runtime-semantics-evaluation">14.5.16</a>) Runtime Semantics: Evaluation</h1>
+<emu-clause id="proposal-sec-class-definitions-runtime-semantics-evaluation">
+  <h1>(<emu-xref href="#sec-class-definitions-runtime-semantics-evaluation">14.5.16</emu-xref>) Runtime Semantics: Evaluation</h1>
   <emu-grammar>ClassDeclaration : `class` BindingIdentifier ClassTail</emu-grammar>
   <emu-alg>
     1. Let _status_ be the result of BindingClassDeclarationEvaluation of this |ClassDeclaration|.
@@ -439,8 +436,8 @@ toc: true
 
 
 <!-- 19.2.1.1.1 -->
-<emu-clause id="sec-createdynamicfunction" aoid="CreateDynamicFunction">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-createdynamicfunction">19.2.1.1.1</a>) Runtime Semantics: CreateDynamicFunction(_constructor_, _newTarget_, _kind_, _args_)</h1>
+<emu-clause id="proposal-sec-createdynamicfunction" aoid="CreateDynamicFunction">
+  <h1>(<emu-xref href="#sec-createdynamicfunction">19.2.1.1.1</emu-xref>) Runtime Semantics: CreateDynamicFunction( _constructor_, _newTarget_, _kind_, _args_ )</h1>
   <p>The abstract operation CreateDynamicFunction is called with arguments _constructor_, _newTarget_, _kind_, and _args_. _constructor_ is the constructor function that is performing this action, _newTarget_ is the constructor that `new` was initially applied to, _kind_ is either `"normal"` or `"generator"`, and _args_ is a List containing the actual argument values that were passed to _constructor_. The following steps are taken:</p>
   <emu-alg>
     1. If _newTarget_ is *undefined*, let _newTarget_ be _constructor_.
@@ -503,8 +500,8 @@ toc: true
 
 
 <!-- 19.2.3.5 -->
-<emu-clause id="sec-function.prototype.tostring">
-  <h1>(<a href="http://tc39.github.io/ecma262/#sec-function.prototype.tostring">19.2.3.5</a>) Function.prototype.toString()</h1>
+<emu-clause id="proposal-sec-function.prototype.tostring">
+  <h1>(<emu-xref href="#sec-function.prototype.tostring">19.2.3.5</emu-xref>) Function.prototype.toString ( )</h1>
 
   <p>When the `toString` method is called with an object _func_ as its *this* value, the following steps are taken:</p>
 
@@ -542,8 +539,8 @@ toc: true
 
 
 <!-- es6num="9.2.7.1" -->
-<emu-clause id="sec-%throwtypeerror%">
-  <h1>(<a href="#sec-%throwtypeerror%">9.2.7.1</a>) %ThrowTypeError% ( )</h1>
+<emu-clause id="proposal-sec-%throwtypeerror%">
+  <h1>(<emu-xref href="#sec-%throwtypeerror%">9.2.7.1</emu-xref>) %ThrowTypeError% ( )</h1>
   <p>The <dfn>%ThrowTypeError%</dfn> intrinsic is a<del>n anonymous</del> built-in function object that is defined once for each realm. When %ThrowTypeError% is called it performs the following steps:</p>
   <emu-alg>
     1. Throw a *TypeError* exception.

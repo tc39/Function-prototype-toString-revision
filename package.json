@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/tc39/Function-prototype-toString-revision#readme",
   "devDependencies": {
-    "ecmarkup": "3.2.0"
+    "ecmarkup": "3.11.2"
   }
 }
