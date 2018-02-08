@@ -22,7 +22,7 @@ git checkout --orphan "$TEMP_BRANCH"
 npm install
 make
 git reset .
-git add -f index.html ecmarkup.{js,css}
+git add -f index.html
 git commit -m 'gh-pages'
 git push -f origin HEAD:gh-pages
 git checkout -f "$CURRENT_BRANCH"
