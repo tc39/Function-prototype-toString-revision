@@ -523,6 +523,13 @@ location: https://github.com/tc39/Function-prototype-toString-revision
 </emu-clause>
 
 
+<emu-clause id="proposal-sec-hosthassourcetextavailable">
+  <h1>HostHasSourceTextAvailable ( _func_ )</h1>
+  <p>HostHasSourceTextAvailable is an implementation-defined abstract operation that allows host environments to prevent the source text from being provided for a given function.</p>
+  <p>An implementation of HostHasSourceTextAvailable may complete normally or abruptly. Any abrupt completions will be propagated to its callers. The default implementation of HostHasSourceTextAvailable is to unconditionally return a normal completion with a value of *true*.</p>
+</emu-clause>
+
+
 <!-- 19.2.3.5 -->
 <emu-clause id="proposal-sec-function.prototype.tostring">
   <h1>(<emu-xref href="#sec-function.prototype.tostring">19.2.3.5</emu-xref>) Function.prototype.toString ( )</h1>
@@ -549,7 +556,7 @@ location: https://github.com/tc39/Function-prototype-toString-revision
   <ins class="block">
     <emu-alg>
       1. If _func_ is a <emu-xref href="#sec-bound-function-exotic-objects">Bound Function exotic object</emu-xref> or a <emu-xref href="#sec-ecmascript-standard-built-in-objects">built-in Function object</emu-xref>, then return an implementation-dependent String source code representation of _func_. The representation must have the syntax of a |NativeFunction|. Additionally, if _func_ is a <emu-xref href="#sec-well-known-intrinsic-objects">Well-known Intrinsic Object</emu-xref>, the portion of the returned String that would be matched by |IdentifierName| must be the initial value of the *name* property of _func_.
-      1. If _func_ has a [[SourceText]] internal slot and Type(_func_.[[SourceText]]) is String, then return _func_.[[SourceText]].
+      1. If _func_ has a [[SourceText]] internal slot and Type(_func_.[[SourceText]]) is String and ? HostHasSourceTextAvailable(_func_), then return _func_.[[SourceText]].
       1. If Type(_func_) is Object and IsCallable(_func_) is *true*, then return an implementation-dependent String source code representation of _func_. The representation must have the syntax of a |NativeFunction|.
       1. Throw a *TypeError* exception.
     </emu-alg>
