@@ -555,7 +555,7 @@ location: https://github.com/tc39/Function-prototype-toString-revision
 
   <ins class="block">
     <emu-alg>
-      1. If _func_ is a <emu-xref href="#sec-bound-function-exotic-objects">Bound Function exotic object</emu-xref> or a <emu-xref href="#sec-ecmascript-standard-built-in-objects">built-in Function object</emu-xref>, then return an implementation-dependent String source code representation of _func_. The representation must have the syntax of a |NativeFunction|. Additionally, if _func_ is a <emu-xref href="#sec-well-known-intrinsic-objects">Well-known Intrinsic Object</emu-xref>, the portion of the returned String that would be matched by |IdentifierName| must be the initial value of the *name* property of _func_.
+      1. If _func_ is a <emu-xref href="#sec-bound-function-exotic-objects">Bound Function exotic object</emu-xref> or a <emu-xref href="#sec-ecmascript-standard-built-in-objects">built-in Function object</emu-xref>, then return an implementation-dependent String source code representation of _func_. The representation must have the syntax of a |NativeFunction|. Additionally, if _func_ is a <emu-xref href="#sec-well-known-intrinsic-objects">Well-known Intrinsic Object</emu-xref> and is not identified as an anonymous function, the portion of the returned String that would be matched by |IdentifierName| must be the initial value of the *name* property of _func_.
       1. If _func_ has a [[SourceText]] internal slot and Type(_func_.[[SourceText]]) is String and ! HostHasSourceTextAvailable(_func_) is *true*, then return _func_.[[SourceText]].
       1. If Type(_func_) is Object and IsCallable(_func_) is *true*, then return an implementation-dependent String source code representation of _func_. The representation must have the syntax of a |NativeFunction|.
       1. Throw a *TypeError* exception.
@@ -566,21 +566,4 @@ location: https://github.com/tc39/Function-prototype-toString-revision
         `function` IdentifierName? `(` FormalParameters `)` `{` `[` `native` `code` `]` `}`
     </emu-grammar>
   </ins>
-</emu-clause>
-
-
-<!-- es6num="9.2.7.1" -->
-<emu-clause id="proposal-sec-%throwtypeerror%">
-  <h1>(<emu-xref href="#sec-%throwtypeerror%">9.2.7.1</emu-xref>) %ThrowTypeError% ( )</h1>
-  <p>The <dfn>%ThrowTypeError%</dfn> intrinsic is a<del>n anonymous</del> built-in function object that is defined once for each realm. When %ThrowTypeError% is called it performs the following steps:</p>
-  <emu-alg>
-    1. Throw a *TypeError* exception.
-  </emu-alg>
-  <p>
-    <ins>
-      The value of the `name` property of %ThrowTypeError% is `"ThrowTypeError"`.
-    </ins>
-  </p>
-  <p>The value of the [[Extensible]] internal slot of a %ThrowTypeError% function is *false*.</p>
-  <p>The `length` property of a %ThrowTypeError% function has the attributes { [[Writable]]: *false*, [[Enumerable]]: *false*, [[Configurable]]: *false* }.</p>
 </emu-clause>
