@@ -542,6 +542,34 @@ location: https://github.com/tc39/Function-prototype-toString-revision
 </emu-clause>
 
 
+<!-- 14.7.10 -->
+<emu-clause id="proposal-sec-async-function-definitions-InstantiateFunctionObject">
+  <h1>(<emu-xref href="sec-async-function-definitions-InstantiateFunctionObject">14.7.10</emu-xref>) Runtime Semantics: InstantiateFunctionObject</h1>
+  <p>With parameter _scope_.</p>
+  <emu-grammar>
+    AsyncFunctionDeclaration : `async` [no LineTerminator here] `function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+  </emu-grammar>
+  <emu-alg>
+    1. If the function code for |AsyncFunctionDeclaration| is strict mode code, let _strict_ be *true*. Otherwise, let _strict_ be *false*.
+    1. Let _name_ be StringValue of |BindingIdentifier|.
+    1. Let _F_ be ! AsyncFunctionCreate(~Normal~, |FormalParameters|, |AsyncFunctionBody|, _scope_, _strict_).
+    1. Perform ! SetFunctionName(_F_, _name_).
+    1. <ins>Set _F_.[[SourceText]] to the source text matched by |AsyncFunctionDeclaration|.</ins>
+    1. Return _F_.
+  </emu-alg>
+  <emu-grammar>
+    AsyncFunctionDeclaration : `async` [no LineTerminator here] `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+  </emu-grammar>
+  <emu-alg>
+    1. If the function code for |AsyncFunctionDeclaration| is strict mode code, let _strict_ be *true*. Otherwise, let _strict_ be *false*.
+    1. Let _F_ be ! AsyncFunctionCreate(~Normal~, |FormalParameters|, |AsyncFunctionBody|, _scope_, _strict_).
+    1. Perform ! SetFunctionName(_F_, `"default"`).
+    1. <ins>Set _F_.[[SourceText]] to the source text matched by |AsyncFunctionDeclaration|.</ins>
+    1. Return _F_.
+  </emu-alg>
+</emu-clause>
+
+
 <!-- 14.7.12 -->
 <emu-clause id="proposal-sec-async-function-definitions-PropertyDefinitionEvaluation">
   <h1>(<emu-xref href="sec-async-function-definitions-PropertyDefinitionEvaluation">14.7.12</emu-xref>) Runtime Semantics: PropertyDefinitionEvaluation</h1>
