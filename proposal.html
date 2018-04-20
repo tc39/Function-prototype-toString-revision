@@ -542,6 +542,84 @@ location: https://github.com/tc39/Function-prototype-toString-revision
 </emu-clause>
 
 
+<!-- 14.7.12 -->
+<emu-clause id="proposal-sec-async-function-definitions-PropertyDefinitionEvaluation">
+  <h1>(<emu-xref href="sec-async-function-definitions-PropertyDefinitionEvaluation">14.7.12</emu-xref>) Runtime Semantics: PropertyDefinitionEvaluation</h1>
+  <p>With parameters _object_ and _enumerable_.</p>
+  <emu-grammar>
+    AsyncMethod : `async` [no LineTerminator here] PropertyName `(` UniqueFormalParameters `)` `{` AsyncFunctionBody `}`
+  </emu-grammar>
+  <emu-alg>
+    1. Let _propKey_ be the result of evaluating |PropertyName|.
+    1. ReturnIfAbrupt(_propKey_).
+    1. If the function code for this |AsyncMethod| is strict mode code, let _strict_ be *true*. Otherwise let _strict_ be *false*.
+    1. Let _scope_ be the LexicalEnvironment of the running execution context.
+    1. Let _closure_ be ! AsyncFunctionCreate(~Method~, |UniqueFormalParameters|, |AsyncFunctionBody|, _scope_, _strict_).
+    1. Perform ! MakeMethod(_closure_, _object_).
+    1. Perform ! SetFunctionName(_closure_, _propKey_).
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |AsyncMethod|.</ins>
+    1. Let _desc_ be the PropertyDescriptor{[[Value]]: _closure_, [[Writable]]: *true*, [[Enumerable]]: _enumerable_, [[Configurable]]: *true*}.
+    1. Return ? DefinePropertyOrThrow(_object_, _propKey_, _desc_).
+  </emu-alg>
+</emu-clause>
+
+
+<!-- 14.7.13 -->
+<emu-clause id="proposal-sec-async-function-definitions-runtime-semantics-evaluation">
+  <h1>(<emu-xref href="sec-async-function-definitions-runtime-semantics-evaluation">14.7.13</emu-xref>) Runtime Semantics: Evaluation</h1>
+  <emu-grammar>
+    AsyncFunctionDeclaration : `async` [no LineTerminator here] `function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+  </emu-grammar>
+  <emu-alg>
+    1. Return NormalCompletion(~empty~).
+  </emu-alg>
+
+  <emu-grammar>
+    AsyncFunctionDeclaration : `async` [no LineTerminator here] `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+  </emu-grammar>
+  <emu-alg>
+    1. Return NormalCompletion(~empty~).
+  </emu-alg>
+
+  <emu-grammar>
+    AsyncFunctionExpression : `async` [no LineTerminator here] `function` `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+  </emu-grammar>
+  <emu-alg>
+    1. If the function code for |AsyncFunctionExpression| is strict mode code, let _strict_ be *true*. Otherwise let _strict_ be *false*.
+    1. Let _scope_ be the LexicalEnvironment of the running execution context.
+    1. Let _closure_ be ! AsyncFunctionCreate(~Normal~, |FormalParameters|, |AsyncFunctionBody|, _scope_, _strict_).
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |AsyncFunctionExpression|.</ins>
+    1. Return _closure_.
+  </emu-alg>
+
+  <emu-grammar>
+    AsyncFunctionExpression : `async` [no LineTerminator here] `function` BindingIdentifier `(` FormalParameters `)` `{` AsyncFunctionBody `}`
+  </emu-grammar>
+  <emu-alg>
+    1. If the function code for |AsyncFunctionExpression| is strict mode code, let _strict_ be *true*. Otherwise let _strict_ be *false*.
+    1. Let _scope_ be the LexicalEnvironment of the running execution context.
+    1. Let _funcEnv_ be ! NewDeclarativeEnvironment(_scope_).
+    1. Let _envRec_ be _funcEnv_'s EnvironmentRecord.
+    1. Let _name_ be StringValue of |BindingIdentifier|.
+    1. Perform ! _envRec_.CreateImmutableBinding(_name_).
+    1. Let _closure_ be ! AsyncFunctionCreate(~Normal~, |FormalParameters|, |AsyncFunctionBody|, _funcEnv_, _strict_).
+    1. Perform ! SetFunctionName(_closure_, _name_).
+    1. Perform ! _envRec_.InitializeBinding(_name_, _closure_).
+    1. <ins>Set _closure_.[[SourceText]] to the source text matched by |AsyncFunctionExpression|.</ins>
+    1. Return _closure_.
+  </emu-alg>
+
+  <emu-grammar>
+    AwaitExpression : `await` UnaryExpression
+  </emu-grammar>
+  <emu-alg>
+    1. Let _exprRef_ be the result of evaluating |UnaryExpression|.
+    1. Let _value_ be ? GetValue(_exprRef_).
+    1. Return ? Await(_value_).
+  </emu-alg>
+</emu-clause>
+
+
 <!-- es6num="19.2.1.1.1" -->
 <emu-clause id="proposal-sec-createdynamicfunction" aoid="CreateDynamicFunction">
   <h1>(<emu-xref href="#sec-createdynamicfunction">19.2.1.1.1</emu-xref>) Runtime Semantics: CreateDynamicFunction( _constructor_, _newTarget_, _kind_, _args_ )</h1>
