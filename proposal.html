@@ -777,7 +777,7 @@ location: https://github.com/tc39/Function-prototype-toString-revision
 
     <emu-grammar>
       NativeFunction :
-        `function` IdentifierName? `(` FormalParameters `)` `{` `[` `native` `code` `]` `}`
+        `function` PropertyName[~Yield, ~Await]? `(` FormalParameters[~Yield, ~Await] `)` `{` `[` `native` `code` `]` `}`
     </emu-grammar>
   </ins>
 </emu-clause>
